@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins', sans-serif;
+        }
+
+        body {
+            display:flex;
+            height:100vh;
+            background:#0b1220;
+            color:white;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width:230px;
+            background:#111827;
+            padding:20px;
+        }
+
+        .sidebar h2 {
+            color:#00e0ff;
+            margin-bottom:20px;
+        }
+
+        .menu a {
+            display:block;
+            padding:12px;
+            margin:8px 0;
+            border-radius:10px;
+            text-decoration:none;
+            color:white;
+            transition:0.3s;
+        }
+
+        .menu a:hover {
+            background:#1f2937;
+        }
+
+        /* Main */
+        .main {
+            flex:1;
+            display:flex;
+            flex-direction:column;
+        }
+
+        /* Navbar */
+        .navbar {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 25px;
+            background:#111827;
+            border-bottom:1px solid #222;
+        }
+
+        .nav-btn {
+            padding:8px 15px;
+            border-radius:20px;
+            border:none;
+            cursor:pointer;
+            margin-left:10px;
+        }
+
+        .home-btn {
+            background:#00e0ff;
+        }
+
+        .logout-btn {
+            background:#ff4d4d;
+            color:white;
+        }
+
+        /* Content */
+        .content {
+            padding:20px;
+        }
+
+        .cards {
+            display:flex;
+            gap:20px;
+            margin-top:20px;
+        }
+
+        .card {
+            flex:1;
+            padding:25px;
+            border-radius:15px;
+            background:linear-gradient(135deg, #1f2937, #111827);
+            transition:0.3s;
+        }
+
+        .card:hover {
+            transform:translateY(-5px);
+        }
+        .active {
+    background:#00e0ff;
+    color:black;
+    font-weight:bold;
+}
+
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>ADMIN</h2>
+
+    <div class="menu">
+        <a href="#">🏠 Dashboard</a>
+        <a th:href="@{/invoice-page}">🧾 Generate Invoice</a>
+        <a href="#">👥 Manage Users</a>
+        <a href="#">📊 Reports</a>
+        <a href="#">📦 Inventory</a>
+    </div>
+</div>
+
+<div class="main">
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <h3>Admin Dashboard</h3>
+
+        <div>
+            <button class="nav-btn home-btn" onclick="window.location.href='/'">Home</button>
+            <button class="nav-btn logout-btn" onclick="window.location.href='/login'">Logout</button>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+        <h2>Welcome Admin 👋</h2>
+
+        <div class="cards">
+            <div class="card">💰 Total Sales</div>
+            <div class="card">🧾 Invoices</div>
+            <div class="card">📦 Stock</div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
