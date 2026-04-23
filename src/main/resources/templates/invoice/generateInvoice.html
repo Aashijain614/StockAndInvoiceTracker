@@ -127,7 +127,9 @@
                         <option th:each="p : ${products}"
                                 th:value="${p.id}"
                                 th:data-price="${p.price}"
-                                th:text="${p.name}">
+                                th:text="${p.name}"
+                                th:data-stock="${p.quantity}"
+                                >
                         </option>
                     </select>
 
@@ -168,8 +170,7 @@
 
 </div>
 <script>
-
-let total = 0;
+let grandTotal = 0;
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -177,39 +178,66 @@ document.addEventListener("DOMContentLoaded", function () {
     const priceInput = document.getElementById("price");
     const qtyInput = document.getElementById("qty");
 
-    // 🔥 AUTO PRICE SET
+    // 🔥 AUTO PRICE + STOCK SET
     productSelect.addEventListener("change", function () {
+
         let selectedOption = this.options[this.selectedIndex];
+
         let price = selectedOption.getAttribute("data-price");
+        let stock = selectedOption.getAttribute("data-stock");
+
+        // set price
         priceInput.value = price || "";
+
+        // set max quantity
+        qtyInput.max = stock;
+
+        // show hint
+        qtyInput.placeholder = "Max: " + stock;
     });
 
 });
 
+
 // 🔥 ADD ITEM FUNCTION
 function addItem() {
 
-    let select = document.getElementById("productSelect");
-    let productName = select.options[select.selectedIndex].text;
+    const select = document.getElementById("productSelect");
+    const qtyInput = document.getElementById("qty");
+    const priceInput = document.getElementById("price");
+
     let productId = select.value;
+    let productName = select.options[select.selectedIndex].text;
 
-    let qty = parseInt(document.getElementById("qty").value);
-    let price = parseFloat(document.getElementById("price").value);
+    let price = parseFloat(priceInput.value);
+    let qty = parseInt(qtyInput.value);
+    let maxStock = parseInt(qtyInput.max);
 
-    // ✅ validation
-    if (!productId || !qty || qty <= 0) {
-        alert("Select valid product & quantity");
+    // ❌ validation 1
+    if (!productId) {
+        alert("Please select a product");
         return;
     }
 
-    // 🔥 calculate item total
-    let itemTotal = qty * price;
+    // ❌ validation 2
+    if (!qty || qty <= 0) {
+        alert("Enter valid quantity");
+        return;
+    }
 
-    total += itemTotal;
+    // ❌ validation 3 (🔥 MOST IMPORTANT)
+    if (qty > maxStock) {
+        alert("Only " + maxStock + " items available in stock!");
+        return;
+    }
 
-    document.getElementById("grandTotal").innerText = total.toFixed(2);
+    // 🔥 calculate
+    let itemTotal = price * qty;
+    grandTotal += itemTotal;
 
-    // 🔥 add row in table
+    document.getElementById("grandTotal").innerText = grandTotal.toFixed(2);
+
+    // 🔥 add row
     let row = `
         <tr>
             <td>${productName}</td>
@@ -221,8 +249,8 @@ function addItem() {
 
     document.querySelector("#itemTable tbody").innerHTML += row;
 
-    // 🔥 hidden inputs (SAFE WAY)
-    let form = document.querySelector("form");
+    // 🔥 hidden inputs (IMPORTANT)
+    const form = document.querySelector("form");
 
     let input1 = document.createElement("input");
     input1.type = "hidden";
@@ -237,13 +265,11 @@ function addItem() {
     form.appendChild(input1);
     form.appendChild(input2);
 
-    // 🔥 reset fields
-    document.getElementById("qty").value = "";
-    document.getElementById("price").value = "";
-    document.getElementById("productSelect").selectedIndex = 0;
+    // 🔥 reset
+    qtyInput.value = "";
+    priceInput.value = "";
+    select.selectedIndex = 0;
 }
-
 </script>
-
 </body>
 </html>

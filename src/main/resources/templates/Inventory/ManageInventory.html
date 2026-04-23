@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Inventory Management</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+
+        * {
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins', sans-serif;
+        }
+
+        body {
+            background:#0b1220;
+            color:white;
+        }
+
+        /* 🔥 NAVBAR */
+        .navbar {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 25px;
+            background:#111827;
+            border-bottom:1px solid #222;
+        }
+
+        .nav-btn {
+            padding:8px 15px;
+            border:none;
+            border-radius:20px;
+            cursor:pointer;
+            margin-left:10px;
+        }
+
+        .home-btn {
+            background:#00e0ff;
+        }
+
+        .logout-btn {
+            background:#ff4d4d;
+            color:white;
+        }
+
+        /* 🔥 CONTAINER */
+        .container {
+            padding:30px;
+        }
+
+        h2 {
+            margin-bottom:25px;
+        }
+
+        /* 🔥 GRID LAYOUT (3 PER ROW) */
+        .cards {
+            display:grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap:25px;
+        }
+
+        /* 🔥 CARD */
+        .card {
+            min-height:140px;
+            border-radius:15px;
+            background:linear-gradient(135deg, #1f2937, #111827);
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .card:hover {
+            transform:translateY(-6px);
+            background:linear-gradient(135deg, #2563eb, #1e40af);
+        }
+
+        .icon {
+            font-size:30px;
+            margin-bottom:10px;
+        }
+
+        .card h3 {
+            font-weight:500;
+        }
+
+        /* 🔥 RESPONSIVE */
+        @media (max-width: 900px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- 🔥 NAVBAR -->
+<div class="navbar">
+    <h2>Inventory Management</h2>
+
+    <div>
+        <button class="nav-btn home-btn" onclick="window.location.href='/dashboard'">
+            Home
+        </button>
+
+        <button class="nav-btn logout-btn" onclick="window.location.href='/logout'">
+            Logout
+        </button>
+    </div>
+</div>
+
+<!-- 🔥 MAIN CONTENT -->
+<div class="container">
+
+    <h2>Manage Inventory</h2>
+
+    <div class="cards">
+
+        <!-- ROW 1 -->
+        <div class="card" onclick="window.location.href='/inventory/add'">
+            <div class="icon">➕</div>
+            <h3>Add Product</h3>
+        </div>
+
+        <div class="card" onclick="window.location.href='/inventory'">
+            <div class="icon">📦</div>
+            <h3>All Products</h3>
+        </div>
+
+        <div class="card" onclick="window.location.href='/inventory/low-stock'">
+            <div class="icon">⚠</div>
+            <h3>Low Stock</h3>
+        </div>
+
+        <!-- ROW 2 -->
+        <div class="card" onclick="window.location.href='/inventory/search'">
+            <div class="icon">🔍</div>
+            <h3>Search Product</h3>
+        </div>
+
+        <div class="card" onclick="window.location.href='/inventory/report'">
+            <div class="icon">📊</div>
+            <h3>Inventory Report</h3>
+        </div>
+
+        <div class="card" onclick="window.location.href='/inventory/out-of-stock'">
+            <div class="icon">❌</div>
+            <h3>Out of Stock</h3>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

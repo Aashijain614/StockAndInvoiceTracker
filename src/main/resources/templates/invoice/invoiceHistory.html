@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Invoice History</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+
+        * {
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins', sans-serif;
+        }
+
+        body {
+            background:#0b1220;
+            color:white;
+        }
+
+        /* 🔥 NAVBAR */
+        .navbar {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 25px;
+            background:#111827;
+            border-bottom:1px solid #222;
+        }
+
+        .nav-btn {
+            padding:8px 15px;
+            border:none;
+            border-radius:20px;
+            cursor:pointer;
+            margin-left:10px;
+        }
+
+        .home-btn {
+            background:#00e0ff;
+        }
+
+        .logout-btn {
+            background:#ff4d4d;
+            color:white;
+        }
+
+        /* 🔥 CONTAINER */
+        .container {
+            padding:25px;
+        }
+
+        h2 {
+            margin-bottom:20px;
+        }
+
+        /* 🔥 HEADER SECTION */
+        .header {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:20px;
+        }
+
+        .search-box {
+            display:flex;
+            gap:10px;
+        }
+
+        .search-box input {
+            padding:8px;
+            border-radius:8px;
+            border:none;
+            background:#1f2937;
+            color:white;
+        }
+
+        .search-box button {
+            padding:8px 12px;
+            border:none;
+            border-radius:8px;
+            background:#2563eb;
+            color:white;
+            cursor:pointer;
+        }
+
+        /* 🔥 TABLE */
+        table {
+            width:100%;
+            border-collapse:collapse;
+            background:#111827;
+            border-radius:10px;
+            overflow:hidden;
+        }
+
+        th, td {
+            padding:12px;
+            text-align:left;
+        }
+
+        th {
+            background:#1f2937;
+        }
+
+        tr {
+            border-bottom:1px solid #222;
+        }
+
+        tr:hover {
+            background:#1a2335;
+        }
+
+        /* 🔥 STATUS */
+        .paid {
+            color:lightgreen;
+        }
+
+        .due {
+            color:#ff4d4d;
+        }
+
+        /* 🔥 BUTTONS */
+        .action-btn {
+            padding:5px 10px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            margin-right:5px;
+        }
+
+        .view {
+            background:#3b82f6;
+            color:white;
+        }
+
+        .delete {
+            background:#ff4d4d;
+            color:white;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- 🔥 NAVBAR -->
+<div class="navbar">
+    <h2>Invoice History</h2>
+
+    <div>
+        <button class="nav-btn home-btn" onclick="window.location.href='/dashboard'">Home</button>
+        <button class="nav-btn logout-btn" onclick="window.location.href='/logout'">Logout</button>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- 🔥 HEADER -->
+    <div class="header">
+        <h2>All Invoices</h2>
+
+        <!-- 🔍 SEARCH -->
+        <form th:action="@{/invoice/history}" method="get" class="search-box">
+            <input type="text" name="keyword" placeholder="Search by customer or invoice no">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- 🔥 TABLE -->
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Invoice No</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr th:each="inv : ${invoices}">
+                <td th:text="${inv.id}"></td>
+                <td th:text="${inv.invoiceNumber}"></td>
+                <td th:text="${inv.customerName}"></td>
+                <td th:text="${inv.date}"></td>
+                <td>₹ <span th:text="${inv.totalAmount}"></span></td>
+
+                <td>
+                    <span th:if="${inv.paymentStatus == 'PAID'}" class="paid">PAID</span>
+                    <span th:if="${inv.paymentStatus == 'PENDING'}" class="due">PENDING</span>
+                </td>
+
+                <td>
+                    <button class="action-btn view"
+                            th:onclick="'window.location.href=\'/invoice/view/' + ${inv.id} + '\''">
+                        View
+                    </button>
+
+                    <button class="action-btn delete"
+                            th:onclick="'window.location.href=\'/invoice/delete/' + ${inv.id} + '\''">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

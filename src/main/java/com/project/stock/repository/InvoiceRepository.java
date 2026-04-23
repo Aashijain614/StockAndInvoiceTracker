@@ -18,5 +18,12 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
 	    @Query("SELECT MAX(i.id) FROM Invoice i")
 		Long getMaxId();
+	    
+        
+	    @Query("SELECT MONTH(i.date), SUM(i.totalAmount) " +
+	            "FROM Invoice i GROUP BY MONTH(i.date) ORDER BY MONTH(i.date)")
+	     List<Object[]> getMonthlySales();
 
+	     // Recent invoices
+	     List<Invoice> findTop5ByOrderByIdDesc();
 }

@@ -16,6 +16,7 @@ import com.project.stock.entity.Product;
 import com.project.stock.entity.User;
 import com.project.stock.repository.ProductRepository;
 import com.project.stock.service.InvoiceService;
+import com.project.stock.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class AdminController {
   
 	private final InvoiceService invoiceService;
 	private final ProductRepository productRepository;
+	private final UserService userService;
 	
 	@GetMapping("/invoice-page")
 	public String invoicePage(Model model) {
@@ -34,7 +36,7 @@ public class AdminController {
 generateInvoiceNumber();
 	    model.addAttribute("invoiceNumber",invoiceNumber);
 	    model.addAttribute("todayDate",LocalDate.now());
-	    return "generateInvoice"; 
+	    return "invoice/generateInvoice"; 
 	}
 	
 	@PostMapping("/invoice")
@@ -52,7 +54,7 @@ generateInvoiceNumber();
 	        invoiceService.generateInvoice(request, user.getEmail());
 
 	        redirectAttributes.addFlashAttribute("success", "Invoice generated successfully!");
-	        return "redirect:/dashboard";
+	        return "redirect:/invoice-page";
 
 	    } catch (Exception e) {
 
@@ -60,7 +62,25 @@ generateInvoiceNumber();
 	        return "redirect:/invoice-page";
 	    }
 	}
+	
+	@GetMapping("/manage-users")
+	public String manageUsers(Model model) {
+	    model.addAttribute("users", userService.getAllUsers());
+	    return "User/manageUser";
+	}
+	
+	@GetMapping("/invoice-history")
+	public String invoiceHistory(Model model) {
+	    model.addAttribute("invoices", invoiceService.getAllInvoices());
+	    return "invoice/invoiceHistory";
+	}
+	
 
+	@GetMapping("/manage-inventory")
+	public String inventoryDashboard() {
+	    return "Inventory/ManageInventory";
+	}
+	
 
 @GetMapping("/logout")
 public String logout(HttpSession session) {

@@ -1,5 +1,6 @@
 package com.project.stock.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -30,6 +31,15 @@ public class UserService {
         }
 
         return null; // login fail
+	}
+	public List<User> getAllUsers()
+	{
+		return userRepository.findAll();
+	}
+
+
+	public List<User> searchUsers(String keyword) {
+		return userRepository.searchUsers(keyword);
 	}
 
 }

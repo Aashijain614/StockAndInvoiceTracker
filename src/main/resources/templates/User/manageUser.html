@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manage Users</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins', sans-serif;
+        }
+
+        body {
+            background:#0b1220;
+            color:white;
+        }
+
+        /* Navbar */
+        .navbar {
+            display:flex;
+            justify-content:space-between;
+            padding:15px 25px;
+            background:#111827;
+            border-bottom:1px solid #222;
+        }
+
+        .nav-btn {
+            padding:8px 15px;
+            border:none;
+            border-radius:20px;
+            cursor:pointer;
+            margin-left:10px;
+        }
+
+        .home-btn { background:#00e0ff; }
+        .logout-btn { background:#ff4d4d; color:white; }
+
+        /* Container */
+        .container {
+            padding:30px;
+        }
+
+        /* Header */
+        .header {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:20px;
+        }
+
+        .add-btn {
+            background:#22c55e;
+            border:none;
+            padding:10px 15px;
+            border-radius:8px;
+            cursor:pointer;
+        }
+
+        /* Table */
+        table {
+            width:100%;
+            border-collapse:collapse;
+            background:#111827;
+            border-radius:10px;
+            overflow:hidden;
+        }
+
+        th, td {
+            padding:12px;
+            text-align:center;
+            border-bottom:1px solid #333;
+        }
+
+        th {
+            background:#1f2937;
+        }
+
+        tr:hover {
+            background:#1f2937;
+        }
+
+        /* Buttons */
+        .edit-btn {
+            background:#3b82f6;
+            border:none;
+            padding:6px 10px;
+            border-radius:6px;
+            cursor:pointer;
+        }
+
+        .delete-btn {
+            background:#ef4444;
+            border:none;
+            padding:6px 10px;
+            border-radius:6px;
+            cursor:pointer;
+            color:white;
+        }
+        .header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* 🔥 SEARCH FULL WIDTH */
+.search-form {
+    flex: 1; /* 🔥 ye search ko stretch karega */
+    display: flex;
+    gap: 10px;
+}
+
+.search-form input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: #1f2937;
+    color: white;
+}
+
+.search-form button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
+}
+
+    </style>
+</head>
+
+<body>
+
+<!-- 🔥 Navbar -->
+<div class="navbar">
+    <h2>Manage Users</h2>
+
+    <div>
+        <button class="nav-btn home-btn" onclick="window.location.href='/dashboard'">Home</button>
+        <button class="nav-btn logout-btn" onclick="window.location.href='/logout'">Logout</button>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Header -->
+   <div class="header">
+
+    <!-- LEFT -->
+    <h3>All Users</h3>
+
+    <!-- CENTER (FULL WIDTH SEARCH) -->
+    <form th:action="@{/manage-users}" method="get" class="search-form">
+        <input type="text" name="keyword"
+               th:value="${param.keyword}"
+               placeholder="Search by name or email...">
+        <button type="submit">🔍</button>
+    </form>
+
+    <!-- RIGHT -->
+    <button class="add-btn" onclick="window.location.href='/add-user'">
+        + Add User
+    </button>
+
+</div>
+    
+
+    <!-- Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="u : ${users}">
+                <td th:text="${u.id}"></td>
+                <td th:text="${u.firstname}"></td>
+                <td th:text="${u.lastname}"></td>
+                <td th:text="${u.email}"></td>
+                <td th:text="${u.role}"></td>
+
+                <td>
+                    <button class="edit-btn"
+                        th:onclick="'window.location.href=\'/edit-user/' + ${u.id} + '\''">
+                        Edit
+                    </button>
+
+                    <button class="delete-btn"
+                        th:onclick="'window.location.href=\'/delete-user/' + ${u.id} + '\''">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>
