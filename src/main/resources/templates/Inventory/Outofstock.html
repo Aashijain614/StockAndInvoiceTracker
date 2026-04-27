@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Out of Stock</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+        body { background:#0b1220; color:white; }
+
+        .navbar {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 25px;
+            background:#111827;
+            border-bottom:1px solid #222;
+        }
+        .nav-btn {
+            padding:8px 15px;
+            border:none;
+            border-radius:20px;
+            cursor:pointer;
+            margin-left:10px;
+            font-family:'Poppins', sans-serif;
+        }
+        .home-btn { background:#00e0ff; color:#0b1220; font-weight:600; }
+        .back-btn { background:#1f2937; color:white; }
+        .logout-btn { background:#ff4d4d; color:white; }
+
+        .container { padding:30px; }
+        h2 { margin-bottom:25px; }
+
+        .alert-banner {
+            background:linear-gradient(135deg, #450a0a, #7f1d1d);
+            border:1px solid #dc2626;
+            border-radius:12px;
+            padding:18px 24px;
+            margin-bottom:25px;
+            display:flex;
+            align-items:center;
+            gap:12px;
+            font-size:15px;
+        }
+        .alert-banner .alert-icon { font-size:24px; }
+
+        .count-badge {
+            display:inline-block;
+            background:#dc2626;
+            color:white;
+            padding:4px 14px;
+            border-radius:20px;
+            font-size:13px;
+            font-weight:600;
+            margin-bottom:20px;
+        }
+
+        table {
+            width:100%;
+            border-collapse:collapse;
+            background:#111827;
+            border-radius:12px;
+            overflow:hidden;
+        }
+        thead { background:#1f2937; }
+        th { padding:14px 16px; text-align:left; color:#9ca3af; font-weight:500; font-size:13px; text-transform:uppercase; letter-spacing:0.5px; }
+        td { padding:13px 16px; border-bottom:1px solid #1f2937; font-size:14px; }
+        tbody tr:hover { background:#1a2436; }
+        tbody tr:last-child td { border-bottom:none; }
+
+        .badge-out {
+            padding:4px 10px;
+            border-radius:20px;
+            font-size:12px;
+            font-weight:600;
+            background:#450a0a;
+            color:#fca5a5;
+        }
+
+        .empty-state {
+            text-align:center;
+            padding:60px 20px;
+            color:#6b7280;
+        }
+        .empty-state .icon { font-size:50px; margin-bottom:15px; }
+        .empty-state p { font-size:16px; }
+        .empty-state .good { color:#6ee7b7; font-weight:600; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <h2>❌ Out of Stock</h2>
+    <div>
+        <button class="nav-btn back-btn" onclick="window.location.href='/manage-inventory'">← Back</button>
+        <button class="nav-btn home-btn" onclick="window.location.href='/dashboard'">Home</button>
+        <button class="nav-btn logout-btn" onclick="window.location.href='/logout'">Logout</button>
+    </div>
+</div>
+
+<div class="container">
+
+    <h2>Out of Stock Products</h2>
+
+    <!-- ALERT if there are items -->
+    <div class="alert-banner" th:if="${!products.isEmpty()}">
+        <span class="alert-icon">🚨</span>
+        <span>
+            <strong th:text="${products.size()}"></strong> product(s) are completely out of stock. Please restock immediately.
+        </span>
+    </div>
+
+    <div th:if="${!products.isEmpty()}">
+        <span class="count-badge" th:text="${products.size() + ' item(s) out of stock'}"></span>
+    </div>
+
+    <!-- EMPTY STATE — all good -->
+    <div th:if="${products.isEmpty()}" class="empty-state">
+        <div class="icon">✅</div>
+        <p class="good">All products are in stock!</p>
+        <p style="margin-top:8px;">No out-of-stock items found.</p>
+    </div>
+
+    <!-- TABLE -->
+    <table th:if="${!products.isEmpty()}">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Product Name</th>
+            <th>Price (₹)</th>
+            <th>Quantity</th>
+            <th>Low Stock Threshold</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p, stat : ${products}">
+            <td th:text="${stat.index + 1}"></td>
+            <td th:text="${p.name}"></td>
+            <td th:text="${'₹ ' + p.price}"></td>
+            <td><strong style="color:#fca5a5;" th:text="${p.quantity}"></strong></td>
+            <td th:text="${p.lowStockThreshold}"></td>
+            <td><span class="badge-out">Out of Stock</span></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

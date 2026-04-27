@@ -2,24 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Invoice History</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
     <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+        body { background:#0b1220; color:white; }
 
-        * {
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:'Poppins', sans-serif;
-        }
-
-        body {
-            background:#0b1220;
-            color:white;
-        }
-
-        /* 🔥 NAVBAR */
         .navbar {
             display:flex;
             justify-content:space-between;
@@ -28,190 +15,177 @@
             background:#111827;
             border-bottom:1px solid #222;
         }
-
         .nav-btn {
             padding:8px 15px;
             border:none;
             border-radius:20px;
             cursor:pointer;
             margin-left:10px;
+            font-family:'Poppins',sans-serif;
+            font-weight:600;
+            font-size:13px;
         }
+        .home-btn   { background:#00e0ff; color:#0b1220; }
+        .logout-btn { background:#ff4d4d; color:white; }
 
-        .home-btn {
-            background:#00e0ff;
-        }
+        .container { padding:25px; }
 
-        .logout-btn {
-            background:#ff4d4d;
-            color:white;
-        }
-
-        /* 🔥 CONTAINER */
-        .container {
-            padding:25px;
-        }
-
-        h2 {
-            margin-bottom:20px;
-        }
-
-        /* 🔥 HEADER SECTION */
         .header {
             display:flex;
             justify-content:space-between;
             align-items:center;
             margin-bottom:20px;
         }
+        h2 { font-size:20px; }
 
-        .search-box {
-            display:flex;
-            gap:10px;
-        }
-
+        .search-box { display:flex; gap:8px; }
         .search-box input {
-            padding:8px;
+            padding:9px 14px;
             border-radius:8px;
-            border:none;
+            border:1px solid #374151;
             background:#1f2937;
             color:white;
+            font-family:'Poppins',sans-serif;
+            font-size:13px;
+            outline:none;
+            width:240px;
         }
-
+        .search-box input:focus { border-color:#2563eb; }
         .search-box button {
-            padding:8px 12px;
+            padding:9px 16px;
             border:none;
             border-radius:8px;
             background:#2563eb;
             color:white;
             cursor:pointer;
+            font-family:'Poppins',sans-serif;
+            font-size:13px;
+            font-weight:600;
         }
+        .search-box button:hover { background:#1d4ed8; }
 
-        /* 🔥 TABLE */
         table {
             width:100%;
             border-collapse:collapse;
             background:#111827;
-            border-radius:10px;
+            border-radius:12px;
             overflow:hidden;
         }
+        thead { background:#1f2937; }
+        th { padding:13px 16px; text-align:left; color:#9ca3af; font-weight:500; font-size:13px; text-transform:uppercase; letter-spacing:0.4px; }
+        td { padding:13px 16px; border-bottom:1px solid #1f2937; font-size:14px; }
+        tbody tr:hover { background:#1a2335; }
+        tbody tr:last-child td { border-bottom:none; }
 
-        th, td {
-            padding:12px;
-            text-align:left;
+        .badge {
+            padding:4px 10px;
+            border-radius:20px;
+            font-size:12px;
+            font-weight:600;
         }
+        .badge-paid    { background:#064e3b; color:#6ee7b7; }
+        .badge-pending { background:#78350f; color:#fcd34d; }
 
-        th {
-            background:#1f2937;
-        }
-
-        tr {
-            border-bottom:1px solid #222;
-        }
-
-        tr:hover {
-            background:#1a2335;
-        }
-
-        /* 🔥 STATUS */
-        .paid {
-            color:lightgreen;
-        }
-
-        .due {
-            color:#ff4d4d;
-        }
-
-        /* 🔥 BUTTONS */
         .action-btn {
-            padding:5px 10px;
+            padding:6px 12px;
             border:none;
             border-radius:8px;
             cursor:pointer;
+            font-family:'Poppins',sans-serif;
+            font-size:12px;
+            font-weight:600;
             margin-right:5px;
         }
+        .btn-view   { background:#3b82f6; color:white; }
+        .btn-delete { background:#ff4d4d; color:white; }
+        .btn-view:hover   { background:#2563eb; }
+        .btn-delete:hover { background:#dc2626; }
 
-        .view {
-            background:#3b82f6;
-            color:white;
+        .empty-state {
+            text-align:center;
+            padding:60px;
+            color:#6b7280;
         }
+        .empty-state .icon { font-size:48px; margin-bottom:12px; }
 
-        .delete {
-            background:#ff4d4d;
-            color:white;
+        .count-info {
+            font-size:13px;
+            color:#9ca3af;
+            margin-bottom:14px;
         }
-
+        .count-info span { color:#00e0ff; font-weight:600; }
     </style>
 </head>
-
 <body>
 
-<!-- 🔥 NAVBAR -->
 <div class="navbar">
-    <h2>Invoice History</h2>
-
+    <h2>🧾 Invoice History</h2>
     <div>
-        <button class="nav-btn home-btn" onclick="window.location.href='/dashboard'">Home</button>
+        <button class="nav-btn home-btn" onclick="window.location.href='/dashboard'">🏠 Home</button>
         <button class="nav-btn logout-btn" onclick="window.location.href='/logout'">Logout</button>
     </div>
 </div>
 
 <div class="container">
 
-    <!-- 🔥 HEADER -->
     <div class="header">
         <h2>All Invoices</h2>
 
-        <!-- 🔍 SEARCH -->
-        <form th:action="@{/invoice/history}" method="get" class="search-box">
-            <input type="text" name="keyword" placeholder="Search by customer or invoice no">
-            <button type="submit">Search</button>
+        <!-- 🔥 FIX: action must match @GetMapping("/invoice-history") -->
+        <form th:action="@{/invoice-history}" method="get" class="search-box">
+            <input type="text" name="keyword" th:value="${keyword}" placeholder="Search customer or invoice no…">
+            <button type="submit">🔍 Search</button>
         </form>
     </div>
 
-    <!-- 🔥 TABLE -->
-    <table>
+    <div class="count-info" th:if="${invoices != null}">
+        Showing <span th:text="${invoices.size()}"></span> invoice(s)
+    </div>
+
+    <div class="empty-state" th:if="${invoices == null or invoices.isEmpty()}">
+        <div class="icon">📭</div>
+        <p>No invoices found.</p>
+    </div>
+
+    <table th:if="${invoices != null and !invoices.isEmpty()}">
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Invoice No</th>
-                <th>Customer</th>
-                <th>Date</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>#</th>
+            <th>Invoice No</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Total (₹)</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
         </thead>
-
         <tbody>
-
-            <tr th:each="inv : ${invoices}">
-                <td th:text="${inv.id}"></td>
-                <td th:text="${inv.invoiceNumber}"></td>
-                <td th:text="${inv.customerName}"></td>
-                <td th:text="${inv.date}"></td>
-                <td>₹ <span th:text="${inv.totalAmount}"></span></td>
-
-                <td>
-                    <span th:if="${inv.paymentStatus == 'PAID'}" class="paid">PAID</span>
-                    <span th:if="${inv.paymentStatus == 'PENDING'}" class="due">PENDING</span>
-                </td>
-
-                <td>
-                    <button class="action-btn view"
-                            th:onclick="'window.location.href=\'/invoice/view/' + ${inv.id} + '\''">
-                        View
-                    </button>
-
-                    <button class="action-btn delete"
-                            th:onclick="'window.location.href=\'/invoice/delete/' + ${inv.id} + '\''">
-                        Delete
-                    </button>
-                </td>
-            </tr>
-
+        <tr th:each="inv, stat : ${invoices}">
+            <td th:text="${stat.index + 1}"></td>
+            <td th:text="${inv.invoiceNumber}"></td>
+            <td th:text="${inv.customerName}"></td>
+            <td th:text="${inv.date}"></td>
+            <td th:text="${'₹ ' + inv.totalAmount}"></td>
+            <td>
+                <!-- 🔥 FIX: compare enum using .name() to avoid type mismatch -->
+                <span th:if="${inv.paymentStatus != null and inv.paymentStatus.name() == 'PAID'}"    class="badge badge-paid">✅ PAID</span>
+                <span th:if="${inv.paymentStatus != null and inv.paymentStatus.name() == 'PENDING'}" class="badge badge-pending">⏳ PENDING</span>
+                <span th:if="${inv.paymentStatus == null}" class="badge badge-pending">—</span>
+            </td>
+            <td>
+                <button class="action-btn btn-view"
+                        th:onclick="'window.location.href=\'/invoice/view/' + ${inv.id} + '\''">
+                    👁 View
+                </button>
+                <button class="action-btn btn-delete"
+                        th:onclick="'if(confirm(\'Delete this invoice?\')) window.location.href=\'/invoice/delete/' + ${inv.id} + '\''">
+                    🗑 Delete
+                </button>
+            </td>
+        </tr>
         </tbody>
     </table>
 
 </div>
-
 </body>
 </html>
